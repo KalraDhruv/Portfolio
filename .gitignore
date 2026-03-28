@@ -1,0 +1,14 @@
+# SvelteKit standard ignores
+node_modules
+.svelte-kit
+.svelte-kit-maybe/
+build/
+dist/
+.env
+
+# Ignoring huge media files to upload on Azure.
+*.webm
+
+# Specific documents or pages
+/static/old/*
+/static/documents/resume.pdf
