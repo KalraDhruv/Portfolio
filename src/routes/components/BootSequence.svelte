@@ -9,18 +9,33 @@
     let showCursor = true;
     let fade_out = false;
 
-    const boot_steps = [
-        { text: "$ curl -v https://dhruvkalra.dev", delay: 120, color: "text-accent" },
-        { text: "* Resolving dhruv.dev (1.1.1.1)... 192.168.1.42", delay: 100, color: "text-foreground opacity-80" },
-        { text: "* Connected — TLS 1.3 (ECDHE-RSA-AES256)", delay: 120, color: "text-accent" },
-        { text: "< HTTP/2 200 OK", delay: 100, color: "text-accent" },
-        { text: "Rendering portfolio... ████████████████ done.", delay: 180, color: "text-accent font-bold" },
-    ];
-
     let typewriter_text = "";
     let typing_current_line = false;
 
     async function run_boot() {
+        let domain = window.location.hostname;
+        if (domain === "localhost" || domain === "127.0.0.1") {
+            domain = "dhruvkalra.tech";
+        }
+        
+        let server_ip = "192.168.1.42";
+
+
+        try {
+            // Fetch the server's IP
+            const dnsRes = await fetch(`https://dns.google/resolve?name=${domain}&type=A`);
+            const dnsData = await dnsRes.json();
+            if (dnsData && dnsData.Answer && dnsData.Answer.length > 0) {
+                server_ip = dnsData.Answer.filter(ans => ans.type === 1).map(ans => ans.data)[0] || dnsData.Answer[dnsData.Answer.length - 1].data;
+            }
+        } catch(e) {}
+
+        const boot_steps = [
+            { text: `* Established connection to ${domain} (${server_ip})`, delay: 100, color: "text-accent" },
+            { text: "Adding easter egg...", delay: 80, color: "text-foreground opacity-80" },
+            { text: "Website Rendered. Thanks for visiting!", delay: 120, color: "text-accent font-bold" }
+        ];
+
         for (let i = 0; i < boot_steps.length; i++) {
             const step = boot_steps[i];
             
