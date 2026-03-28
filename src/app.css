@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Cascadia Code", monospace;
+  font-weight: 600;
+}
+
+html[data-theme="dark"] {
+  --background: #2f3741;
+  --foreground: #e6e6e6;
+  --accent: #1ad9d9;
+  --secondary: #a6e3a1;
+  --tertiary: #f5c2e7;
+  --muted: #596b81;
+  --border: #3b4655;
+}
+
+.box-shadow {
+  -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.40);
+  -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.40);
+  box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.40);
+}
+
+.surrounding-shadow {
+  -webkit-box-shadow: 0px 0px 24px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 24px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 24px 0px rgba(0, 0, 0, 0.75);
+}
