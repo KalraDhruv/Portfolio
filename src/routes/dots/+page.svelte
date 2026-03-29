@@ -18,8 +18,8 @@ Making this rice was like going on a pilgrimage to other people's ideal rice and
 	let tab_images = {
 		"dotfiles.txt": [
 			{ 
-				"video_url": "/content/output.webm",
-				"url": "/content/output.webm",
+				"video_url": "https://assets0107.blob.core.windows.net/media/output.webm",
+				"url": "https://assets0107.blob.core.windows.net/media/output.webm",
 				"alt": "Wayland Tiling WM Demo",
 			},
 			{ 
