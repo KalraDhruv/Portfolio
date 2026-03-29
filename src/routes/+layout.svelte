@@ -1,4 +1,6 @@
 <script>
+	export let data;
+	export let params;
 	import './styles.css';
 	import "/src/app.css";
 	import { onMount } from 'svelte';
@@ -242,8 +244,8 @@
 						<img  src="/content/anime-profile.png" alt="Pfp" class="responsive-pfp" on:click={gif_view}/>
 						
 						<!-- Terminal prompt breadcrumb -->
-						<div class="terminal-prompt flex flex-row items-center gap-0 font-mono lg:mr-8 mr-4">
-							<span class="text-tertiary font-bold lg:text-lg text-sm">dhruv</span><span class="text-secondary lg:text-lg text-sm">@</span><span class="text-tertiary font-bold lg:text-lg text-sm">arch</span><span class="text-secondary lg:text-lg text-sm">:</span><span class="text-accent font-bold lg:text-lg text-sm">{terminal_path}</span><span class="text-foreground lg:text-lg text-sm ml-1">$</span>
+						<div class="terminal-prompt flex flex-row items-center gap-0 font-mono lg:mr-8 whitespace-nowrap">
+							<span class="text-tertiary font-bold lg:text-lg text-sm inline">dhruvkalra</span><span class="text-secondary lg:text-lg text-sm inline ">@</span><span class="text-tertiary font-bold lg:text-lg text-sm inline ">arch</span><span class="text-secondary lg:text-lg text-sm lg:inline hidden">:</span><span class="text-accent lg:inline hidden font-bold lg:text-lg text-sm">{terminal_path}</span>
 						</div>
 						
 						<div class="lg:block hidden text-foreground opacity-50 font-bold">

@@ -31,7 +31,12 @@
         } catch(e) {}
 
         const boot_steps = [
-            { text: `* Established connection to ${domain} (${server_ip})`, delay: 100, color: "text-accent" },
+            { 
+                text: `* Established connection to ${domain}`, 
+                suffix: `(${server_ip})`,
+                delay: 100, 
+                color: "text-accent" 
+            },
             { text: "Adding easter egg...", delay: 80, color: "text-foreground opacity-80" },
             { text: "Website Rendered. Thanks for visiting!", delay: 120, color: "text-accent font-bold" }
         ];
@@ -43,15 +48,26 @@
             typewriter_text = "";
             typing_current_line = true;
             
+            // Type the main text
             for (let c = 0; c < step.text.length; c++) {
                 typewriter_text += step.text[c];
-                // Force reactivity
                 typewriter_text = typewriter_text;
                 await sleep(step.text[c] === ' ' ? 8 : 15);
             }
+
+            // Type the suffix with a responsive break if it exists
+            if (step.suffix) {
+                typewriter_text += '<br class="lg:hidden" />';
+                typewriter_text += '<span class="lg:inline hidden">&nbsp;</span>';
+                for (let c = 0; c < step.suffix.length; c++) {
+                    typewriter_text += step.suffix[c];
+                    typewriter_text = typewriter_text;
+                    await sleep(step.suffix[c] === ' ' ? 8 : 15);
+                }
+            }
             
             typing_current_line = false;
-            lines = [...lines, { text: step.text, color: step.color }];
+            lines = [...lines, { html: typewriter_text, color: step.color }];
             typewriter_text = "";
             
             await sleep(step.delay);
@@ -92,11 +108,11 @@
         </div>
         <div class="boot-lines">
             {#each lines as line}
-                <div class="boot-line {line.color}">{line.text || "\u00A0"}</div>
+                <div class="boot-line {line.color}">{@html line.html || "\u00A0"}</div>
             {/each}
             {#if typing_current_line}
                 <div class="boot-line text-foreground">
-                    {typewriter_text}<span class="{showCursor ? 'opacity-100' : 'opacity-0'} transition duration-100 text-accent">█</span>
+                    {@html typewriter_text}<span class="{showCursor ? 'opacity-100' : 'opacity-0'} transition duration-100 text-accent">█</span>
                 </div>
             {:else if !fade_out}
                 <div class="boot-line">
@@ -149,7 +165,7 @@
     .boot-container {
         max-width: 700px;
         width: 90%;
-        padding: 2rem;
+        padding: 1rem;
         position: relative;
         z-index: 2;
     }
@@ -170,10 +186,14 @@
     .boot-line {
         font-size: 0.8rem;
         line-height: 1.5;
-        white-space: pre;
+        white-space: pre-wrap;
+        word-break: break-all;
     }
     
     @media (min-width: 1024px) {
+        .boot-container {
+            padding: 2rem;
+        }
         .boot-header {
             font-size: 1.1rem;
         }

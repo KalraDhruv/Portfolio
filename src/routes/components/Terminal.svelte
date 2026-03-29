@@ -185,13 +185,13 @@
 		{#each Object.entries(content) as [title, paragraph]}
 			{#if title == selected_tab}
 				<div role="button" 
-					class="box-shadow text-center items-center justify-center lg:w-48 w-32 lg:rounded-t-xl rounded-t-md bg-muted p-2 text-accent font-bold">
+					class="text-center items-center justify-center lg:w-64 w-44 lg:rounded-t-xl rounded-t-md bg-muted p-2 text-accent font-bold">
 					{tab_typewriter_texts[title] || ""}<span class="{showCursor && tab_typewriter_texts[title] !== title ? 'opacity-1' : 'opacity-0'} transition duration-100">┃</span>
 				</div>
 			{:else}
 				<div role="button" 
 					on:click={() => change_tab(title)}
-					class="box-shadow text-center items-center justify-center lg:w-48 w-32 lg:rounded-t-xl rounded-t-md bg-background p-2 text-foreground opacity-60 font-bold">
+					class="text-center items-center justify-center lg:w-64 w-44 lg:rounded-t-xl rounded-t-md bg-background p-2 text-foreground opacity-60 font-bold">
 					{title}
 				</div>
 			{/if}
@@ -202,7 +202,7 @@
 	{#if Object.keys(content).length > 1}
 		<div role="button" 
 			on:click={ toggle_dropdown }
-			class="text-xs box-shadow text-center flex gap-2 items-center justify-center w-36 rounded-t-md bg-muted p-2 text-accent font-bold">
+			class="text-xs text-center flex gap-2 items-center justify-center w-48 rounded-t-md bg-muted p-2 text-accent font-bold">
 			{tab_typewriter_texts[selected_tab] || ""}<span class="{showCursor && tab_typewriter_texts[selected_tab] !== selected_tab ? 'opacity-1' : 'opacity-0'} transition duration-100">┃</span>
 			{#if is_dropdown_open}
 				<FontAwesomeIcon icon={faAngleUp} />
@@ -214,14 +214,14 @@
 		</div> 
 			{#if is_dropdown_open}
 				<div class="lg:hidden block z-30 fixed inset-0 bg-black bg-opacity-0 transition-opacity" on:click={close_dropdown}></div>
-				<div class="absolute rounded-b-md left-0 top-full w-36 flex flex-col text-xs bg-muted shadow-md z-50"
+				<div class="absolute rounded-b-md left-0 top-full w-48 flex flex-col text-xs bg-muted z-50"
 					transition:slide={{duration: 300}}
 				>
 					{#each Object.entries(content) as [title, paragraph]}
 						{#if title != selected_tab}
 							<div role="button" 
 								on:click={() => { is_dropdown_open = false; change_tab(title)}}
-								class="box-shadow text-center flex items-center justify-center lg:w-48 w-36 bg-background p-2 text-foreground opacity-60 font-bold">
+								class=" text-center flex items-center justify-center lg:w-64 w-48 bg-background p-2 text-foreground opacity-60 font-bold">
 								{title}
 							</div>
 						{/if}
@@ -234,7 +234,7 @@
 			{/if}
 	{:else}
 		<div  
-			class="text-xs box-shadow text-center flex gap-2 items-center justify-center w-36 rounded-t-md bg-muted p-2 text-accent font-bold">
+			class="text-xs box-shadow text-center flex gap-2 items-center justify-center w-48 rounded-t-md bg-muted p-2 text-accent font-bold">
 			{tab_typewriter_texts[selected_tab] || ""}<span class="{showCursor && tab_typewriter_texts[selected_tab] !== selected_tab ? 'opacity-1' : 'opacity-0'} transition duration-100">┃</span>
 		</div>
 	{/if}
@@ -242,24 +242,26 @@
 <div class="fixed lg:h-full h-dvh lg:w-full w-dvw top-0 left-0 lg:p-8 p-3 lg:pt-[11.7rem] lg:pl-[21rem] pt-[108px] pointer-events-none">
 <div class="pointer-events-auto bg-muted {is_dropdown_open? "" : "z-10"} lg:p-4 p-2 lg:rounded-b-xl box-shadow lg:rounded-tr-xl rounded-b-md rounded-tr-md h-full w-full flex overflow-hidden">
 	<div class="grid {(selected_tab in tab_images)? "lg:grid-cols-3 lg:grid-rows-1 lg:gap-4 gap-2 grid-rows-3" : "" }  h-full w-full">
-		<div class="terminal-content-area bg-background flex col-span-2 lg:row-span-1 row-span-2 flex-row w-full h-full overflow-y-auto overflow-x-clip">
+		<div class="terminal-content-area bg-background relative col-span-2 lg:row-span-1 row-span-2 flex flex-row w-full h-full overflow-hidden">
 			<div class="crt-scanlines"></div>
-			<div class="flex flex-col items-end lg:w-14 w-10 h-full bg-muted">
-				{#each Array.from({ length: total_lines }) as _, i}
-					<div class="lg:hidden block text-xs lg:px-2 px-1 w-full text-right text-foreground bg-muted">
-						{i+1}
-					</div>
-				{/each}
-				{#each Array.from({ length: total_lg_lines }) as _, i}
-					<div class="lg:block hidden text-lg lg:px-2 px-1 w-full text-right text-foreground bg-muted">
-						{i+1}
-					</div>
-				{/each}
-			</div>
-			<div class="flex flex-col w-full h-full overflow-y-auto" bind:this={text_container}>
-					<div class="markdown-content { preserve_white_space? "ascii" : "" } lg:text-lg text-xs px-3 text-foreground transition-all">
+			<div class="flex flex-row w-full h-full overflow-y-auto overflow-x-clip" bind:this={text_container}>
+				<div class="flex flex-col items-end lg:w-14 w-10 shrink-0 bg-muted min-h-full">
+					{#each Array.from({ length: total_lines }) as _, i}
+						<div class="lg:hidden block text-xs lg:px-2 px-1 w-full text-right text-foreground bg-muted">
+							{i+1}
+						</div>
+					{/each}
+					{#each Array.from({ length: total_lg_lines }) as _, i}
+						<div class="lg:block hidden text-lg lg:px-2 px-1 w-full text-right text-foreground bg-muted">
+							{i+1}
+						</div>
+					{/each}
+				</div>
+				<div class="flex flex-col w-full min-h-full">
+					<div class="markdown-content { preserve_white_space? "ascii" : "" } lg:text-lg text-xs px-3 py-1 text-foreground transition-all">
 						{@html rendered_content}
 					</div>
+				</div>
 			</div>
 		</div>
 		{#if selected_tab in tab_images}

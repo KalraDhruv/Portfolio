@@ -1,4 +1,6 @@
 <script>
+	export let data;
+	export let params;
 	import '../styles.css';
 	import "/src/app.css";
 </script>
