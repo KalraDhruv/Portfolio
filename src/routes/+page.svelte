@@ -15,13 +15,11 @@ Feeling Bored? Try pressing the image on the top left.
 `;
 	let content = {"home.txt": text,};
 
-	let tab_images = {
-	};
+
 	let selected_tab = "home.txt";
 </script>
 
 
 <Terminal content={ content } 
-	tab_images={ tab_images } 
 	selected_tab={ selected_tab } 
 />

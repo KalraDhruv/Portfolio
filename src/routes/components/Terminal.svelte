@@ -1,4 +1,9 @@
-<script>
+<script lang="ts">
+	interface TabImage {
+		url: string;
+		alt: string;
+		video_url?: string;
+	}
 	import '../styles.css';
 	import "/src/app.css";
 	import { onMount } from 'svelte';
@@ -11,33 +16,26 @@
     import { slide } from 'svelte/transition';
 	import { marked } from 'marked';
 
-	export let content = {
+	export let content: Record<string, string> = {
 		"sample.txt": `TODO`,
 	};
 
-	export let tab_images = {
-		"sample.txt": [
-			{ 
-				"url": "/content/sample.webp",
-				"alt": "Sample image",
-			},
-		],
-	};
+	export let tab_images: Record<string, TabImage[]> = {} as Record<string, TabImage[]>;
 
 	export let selected_tab = "introduction.txt";
 
 	export let preserve_white_space = false;
 
-	let gallery_container;
-	let text_container;
-	let selected_image = {};
+	let gallery_container: HTMLDivElement;
+	let text_container: HTMLDivElement;
+	let selected_image: TabImage | null = null;
 
 	// Typewriter state for tab titles
-	let tab_typewriter_texts = {};
-	let tab_typing_intervals = {};
+	let tab_typewriter_texts: Record<string, string> = {};
+	let tab_typing_intervals: Record<string, ReturnType<typeof setInterval>> = {};
 	let tab_typing_speed = 120;
 
-	function typewrite_tab(title) {
+	function typewrite_tab(title: string) {
 		// Clear any existing interval for this tab
 		Object.keys(tab_typing_intervals).forEach(key => {
 			clearInterval(tab_typing_intervals[key]);
@@ -69,7 +67,7 @@
 	}
 
 	// Render markdown content
-	function render_content(tab_title) {
+	function render_content(tab_title: string) {
 		if (!content[tab_title]) return '';
 		if (preserve_white_space) {
 			return content[tab_title];
@@ -79,8 +77,8 @@
 
 	$: rendered_content = render_content(selected_tab);
 
-	function isVideo(img){
-		if (img.video_url.endsWith('.mp4') || img.video_url.endsWith('.webm')){
+	function isVideo(img: TabImage){
+		if (img.video_url && (img.video_url.endsWith('.mp4') || img.video_url.endsWith('.webm'))){
 			return true
 		}else{
 			return false
@@ -88,7 +86,7 @@
 	}
 
 
-	function change_tab(tab_title) {
+	function change_tab(tab_title: string) {
 		loadedImages = {};
 		selected_tab = tab_title;
 		left_shadow_opacity = 0;
@@ -109,12 +107,12 @@
 	}
 
 	let showCursor = true;
-	let cursorBlink;
+	let cursorBlink: ReturnType<typeof setInterval>;
 
 	// Stuff to show skeletons for images
-	let loadedImages = {};
+	let loadedImages: Record<string, boolean> = {};
 
-	function markLoaded(url) {
+	function markLoaded(url: string) {
 		loadedImages = { ...loadedImages, [url]: true };
 	}
 
@@ -290,26 +288,26 @@
 							{/if}
 						</div>
 					{/each}
-					{#if (Object.keys(selected_image).length !== 0) }
+					{#if selected_image !== null}
 						<div 
-							on:click={() => { selected_image = {} }}
+							on:click={() => { selected_image = null }}
 							class="z-20 fixed p-16 bg-black opacity-70 top-0 left-0 h-dvh w-dvw">
 						</div>
 						<div class="pointer-events-none fixed z-30 top-0 left-0 w-dvw h-dvh flex flex-col items-center justify-center p-4">
 							<div class="z-10 {isVideo(selected_image) ? 'lg:w-3/4' : 'lg:w-2/3'} w-full flex flex-col items-end">
 								<button
 									class="pointer-events-auto pb-2"
-									on:click={() => { selected_image = {}}}
+									on:click={() => { selected_image = null}}
 								>
 									<FontAwesomeIcon icon={faXmark} class="text-lg aspect-square px-2 bg-background py-2 text-foreground"/>
 								</button>
 								{#if isVideo(selected_image)}
 									<video
 										role="button"
-										on:click={() => window.open(selected_image.video_url, '_blank')}
+										on:click={() => selected_image && window.open(selected_image.video_url, '_blank')}
 										class="surrounding-shadow pointer-events-auto border-8 border-background opacity-100 w-full"
-										src={selected_image.video_url}
-										alt={selected_image.alt}
+										src={selected_image?.video_url}
+										title={selected_image?.alt}
 										controls
 										autoplay
 										loop
@@ -319,11 +317,11 @@
 								{:else}
 									<img
 										role="button"
-										on:click={() => window.open(selected_image.url, '_blank')}
+										on:click={() => selected_image && window.open(selected_image.url, '_blank')}
 										class="surrounding-shadow pointer-events-auto border-8 border-background opacity-100 w-full"
 										width="1225"
-										src={selected_image.url}
-										alt={selected_image.alt}
+										src={selected_image?.url}
+										alt={selected_image?.alt}
 									/>
 								{/if}
 							</div>

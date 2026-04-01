@@ -1,9 +1,10 @@
-<script>
+<script lang="ts">
     import { onMount, createEventDispatcher } from 'svelte';
     
     const dispatch = createEventDispatcher();
     
-    let lines = [];
+    /** @type {Array<{html: string, color: string}>} */
+    let lines: Array<{html: string, color: string}> = [];
     let current_line = 0;
     let boot_complete = false;
     let showCursor = true;
@@ -26,7 +27,7 @@
             const dnsRes = await fetch(`https://dns.google/resolve?name=${domain}&type=A`);
             const dnsData = await dnsRes.json();
             if (dnsData && dnsData.Answer && dnsData.Answer.length > 0) {
-                server_ip = dnsData.Answer.filter(ans => ans.type === 1).map(ans => ans.data)[0] || dnsData.Answer[dnsData.Answer.length - 1].data;
+                server_ip = dnsData.Answer.filter((ans: {type: number, data: string}) => ans.type === 1).map((ans: {type: number, data: string}) => ans.data)[0] || dnsData.Answer[dnsData.Answer.length - 1].data;
             }
         } catch(e) {}
 
@@ -81,12 +82,12 @@
         dispatch('complete');
     }
 
-    function sleep(ms) {
+    function sleep(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     // Cursor blink
-    let cursorInterval;
+    let cursorInterval: ReturnType<typeof setInterval>;
     
     onMount(() => {
         cursorInterval = setInterval(() => {

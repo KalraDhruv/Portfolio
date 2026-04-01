@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	export let data;
 	export let params;
 	import './styles.css';
@@ -79,17 +79,17 @@
 	let selected_item = "~";
 
 	// Typewriter state for sidebar items
-	let sidebar_typewriter_texts = {};
-	let sidebar_typing_interval = null;
+	let sidebar_typewriter_texts: Record<string, string> = {};
+	let sidebar_typing_interval: ReturnType<typeof setInterval> | undefined = undefined;
 	let sidebar_typing_speed = 25;
 	let showSidebarCursor = true;
 	let sidebar_typing_active = false;
 
-	function typewrite_sidebar_item(title) {
+	function typewrite_sidebar_item(title: string) {
 		// Clear any existing interval
 		if (sidebar_typing_interval) {
 			clearInterval(sidebar_typing_interval);
-			sidebar_typing_interval = null;
+			sidebar_typing_interval = undefined;
 		}
 
 		// All items show full text except the one being typed
@@ -110,18 +110,18 @@
 				i++;
 			} else {
 				clearInterval(sidebar_typing_interval);
-				sidebar_typing_interval = null;
+				sidebar_typing_interval = undefined;
 				sidebar_typing_active = false;
 			}
 		}, sidebar_typing_speed);
 	}
 
-	function get_sidebar_text(title) {
+	function get_sidebar_text(title: string) {
 		return sidebar_typewriter_texts[title] || title;
 	}
 
 	// Terminal prompt breadcrumb
-	const path_map = {
+	const path_map: Record<string, string> = {
 		"/": "~",
 		"/about": "~/about-me.txt",
 		"/work": "~/my-work",
