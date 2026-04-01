@@ -23,8 +23,11 @@
 
 
         try {
-            // Fetch the server's IP
-            const dnsRes = await fetch(`https://dns.google/resolve?name=${domain}&type=A`);
+            // Fetch the server's IP (with 3s timeout to prevent boot freeze)
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 3000);
+            const dnsRes = await fetch(`https://dns.google/resolve?name=${domain}&type=A`, { signal: controller.signal });
+            clearTimeout(timeoutId);
             const dnsData = await dnsRes.json();
             if (dnsData && dnsData.Answer && dnsData.Answer.length > 0) {
                 server_ip = dnsData.Answer.filter((ans: {type: number, data: string}) => ans.type === 1).map((ans: {type: number, data: string}) => ans.data)[0] || dnsData.Answer[dnsData.Answer.length - 1].data;
